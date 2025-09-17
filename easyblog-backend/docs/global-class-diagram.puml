@@ -1,0 +1,136 @@
+@startuml
+' 全局类图 - 简化版
+package "Easy Blog System" {
+  package "Backend (Spring Boot)" {
+    package "Controllers" {
+      class UserController
+      class QuestionController
+      class ProgressController
+      class ExamRecordController
+    }
+    
+    package "Services" {
+      interface UserService
+      interface QuestionService
+      interface ProgressService
+      interface ExamRecordService
+    }
+    
+    package "Repositories" {
+      interface UserRepository
+      interface QuestionRepository
+      interface ProgressRepository
+      interface ExamRecordRepository
+    }
+    
+    package "Entities" {
+      class User
+      class Question
+      class Progress
+      class ExamRecord
+    }
+    
+    package "DTOs" {
+      class UserRegistrationDto
+      class UserLoginDto
+      class QuestionDto
+      class ProgressDto
+      class ExamRecordDto
+    }
+    
+    package "Security" {
+      class JwtAuthenticationFilter
+      class UserDetailsServiceImpl
+      class UserDetailsImpl
+      class JwtUtils
+    }
+    
+    package "Config" {
+      class SecurityConfig
+      class JpaConfig
+    }
+    
+    package "Utils" {
+      class ApiResponse
+      class PageResult
+      class DateUtils
+      class PasswordUtils
+      class StringUtils
+    }
+    
+    package "Exceptions" {
+      class GlobalExceptionHandler
+      class ResourceNotFoundException
+      class BadRequestException
+      class UnauthorizedException
+      class ForbiddenException
+    }
+  }
+  
+  package "Database" {
+    database "MySQL" as DB
+  }
+  
+  package "Frontend (Vue.js)" {
+    package "Views" {
+      class LoginView
+      class QuestionAdminView
+      class PracticeView
+      class ExamView
+      class SettingsView
+    }
+    
+    package "Components" {
+      class TableComponent
+      class MessageComponent
+    }
+    
+    package "Utils" {
+      class RequestUtils
+      class QuestionStore
+    }
+    
+    package "Router" {
+      class Router
+    }
+  }
+}
+
+' 主要关系
+UserController --> UserService
+QuestionController --> QuestionService
+ProgressController --> ProgressService
+ExamRecordController --> ExamRecordService
+
+UserService --> UserRepository
+QuestionService --> QuestionRepository
+ProgressService --> ProgressRepository
+ExamRecordService --> ExamRecordRepository
+
+UserRepository --> User
+QuestionRepository --> Question
+ProgressRepository --> Progress
+ExamRecordRepository --> ExamRecord
+
+UserRegistrationDto --> User
+UserLoginDto --> User
+QuestionDto --> Question
+ProgressDto --> Progress
+ExamRecordDto --> ExamRecord
+
+SecurityConfig --> JwtAuthenticationFilter
+UserDetailsServiceImpl --> UserRepository
+JwtAuthenticationFilter --> JwtUtils
+
+User "1" -- "*" Progress : has
+User "1" -- "*" ExamRecord : has
+Question "1" -- "*" Progress : has
+
+DB ..> UserRepository
+DB ..> QuestionRepository
+DB ..> ProgressRepository
+DB ..> ExamRecordRepository
+
+Frontend ..> Backend : REST API
+
+@enduml

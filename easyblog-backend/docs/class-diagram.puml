@@ -1,0 +1,268 @@
+@startuml
+' 静态类图
+package "com.example.easyblogbackend.entity" {
+  class User {
+    - Long id
+    - String username
+    - String password
+    - String email
+    - String role
+    - LocalDateTime createdAt
+    - LocalDateTime updatedAt
+    + getters/setters
+  }
+  
+  class Question {
+    - Long id
+    - String title
+    - String content
+    - String category
+    - String difficulty
+    - LocalDateTime createdAt
+    - LocalDateTime updatedAt
+    + getters/setters
+  }
+  
+  class Progress {
+    - Long id
+    - Long userId
+    - Long questionId
+    - Boolean isCompleted
+    - Integer attempts
+    - LocalDateTime lastAttempt
+    + getters/setters
+  }
+  
+  class ExamRecord {
+    - Long id
+    - Long userId
+    - String examName
+    - Integer score
+    - Integer totalQuestions
+    - LocalDateTime examDate
+    + getters/setters
+  }
+}
+
+package "com.example.easyblogbackend.repository" {
+  interface UserRepository {
+    + JpaRepository<User, Long>
+  }
+  interface QuestionRepository {
+    + JpaRepository<Question, Long>
+  }
+  interface ProgressRepository {
+    + JpaRepository<Progress, Long>
+  }
+  interface ExamRecordRepository {
+    + JpaRepository<ExamRecord, Long>
+  }
+}
+
+package "com.example.easyblogbackend.service" {
+  interface UserService {
+    + User createUser(User user)
+    + User getUserById(Long id)
+    + List<User> getAllUsers()
+    + User updateUser(Long id, User user)
+    + void deleteUser(Long id)
+  }
+  
+  interface QuestionService {
+    + Question createQuestion(Question question)
+    + Question getQuestionById(Long id)
+    + List<Question> getAllQuestions()
+    + Question updateQuestion(Long id, Question question)
+    + void deleteQuestion(Long id)
+  }
+  
+  interface ProgressService {
+    + Progress createProgress(Progress progress)
+    + Progress getProgressById(Long id)
+    + List<Progress> getProgressByUser(Long userId)
+    + Progress updateProgress(Long id, Progress progress)
+    + void deleteProgress(Long id)
+  }
+  
+  interface ExamRecordService {
+    + ExamRecord createExamRecord(ExamRecord record)
+    + ExamRecord getExamRecordById(Long id)
+    + List<ExamRecord> getExamRecordsByUser(Long userId)
+    + ExamRecord updateExamRecord(Long id, ExamRecord record)
+    + void deleteExamRecord(Long id)
+  }
+}
+
+package "com.example.easyblogbackend.controller" {
+  class UserController {
+    + @PostMapping("/register")
+    + @PostMapping("/login")
+    + @GetMapping("/{id}")
+    + @GetMapping("/users")
+    + @PutMapping("/{id}")
+    + @DeleteMapping("/{id}")
+  }
+  
+  class QuestionController {
+    + @PostMapping("/")
+    + @GetMapping("/{id}")
+    + @GetMapping("/questions")
+    + @PutMapping("/{id}")
+    + @DeleteMapping("/{id}")
+  }
+  
+  class ProgressController {
+    + @PostMapping("/")
+    + @GetMapping("/{id}")
+    + @GetMapping("/user/{userId}")
+    + @PutMapping("/{id}")
+    + @DeleteMapping("/{id}")
+  }
+  
+  class ExamRecordController {
+    + @PostMapping("/")
+    + @GetMapping("/{id}")
+    + @GetMapping("/user/{userId}")
+    + @PutMapping("/{id}")
+    + @DeleteMapping("/{id}")
+  }
+}
+
+package "com.example.easyblogbackend.dto" {
+  class UserRegistrationDto {
+    - String username
+    - String password
+    - String email
+    + getters/setters
+  }
+  
+  class UserLoginDto {
+    - String username
+    - String password
+    + getters/setters
+  }
+  
+  class QuestionDto {
+    - String title
+    - String content
+    - String category
+    - String difficulty
+    + getters/setters
+  }
+  
+  class ProgressDto {
+    - Long userId
+    - Long questionId
+    - Boolean isCompleted
+    - Integer attempts
+    + getters/setters
+  }
+  
+  class ExamRecordDto {
+    - Long userId
+    - String examName
+    - Integer score
+    - Integer totalQuestions
+    + getters/setters
+  }
+}
+
+package "com.example.easyblogbackend.config" {
+  class SecurityConfig {
+    + configure(HttpSecurity http)
+    + passwordEncoder()
+  }
+  
+  class JpaConfig {
+    + jpaVendorAdapter()
+    + entityManagerFactory()
+  }
+}
+
+package "com.example.easyblogbackend.security" {
+  class JwtAuthenticationFilter {
+    + doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain)
+  }
+  
+  class UserDetailsServiceImpl {
+    + loadUserByUsername(String username)
+  }
+  
+  class UserDetailsImpl {
+    - Long id
+    - String username
+    - String password
+    - Collection<? extends GrantedAuthority> authorities
+    + getters/setters
+  }
+}
+
+package "com.example.easyblogbackend.utils" {
+  class ApiResponse<T> {
+    - boolean success
+    - String message
+    - T data
+    - int status
+    + success(T data)
+    + error(String message)
+    + getters/setters
+  }
+  
+  class PageResult<T> {
+    - List<T> data
+    - Long total
+    - Integer pageNum
+    - Integer pageSize
+    + getters/setters
+  }
+  
+  class JwtUtils {
+    + String generateJwtToken(Authentication authentication)
+    + String getUserNameFromJwtToken(String token)
+    + boolean validateJwtToken(String token)
+  }
+  
+  class DateUtils {
+    + String formatDateTime(LocalDateTime dateTime)
+    + LocalDateTime parseDateTime(String dateTimeStr)
+  }
+  
+  class PasswordUtils {
+    + String encodePassword(String rawPassword)
+    + boolean matches(String rawPassword, String encodedPassword)
+  }
+  
+  class StringUtils {
+    + boolean isEmpty(String str)
+    + boolean isNotEmpty(String str)
+    + String trim(String str)
+  }
+}
+
+' 关系
+User "1" -- "*" Progress : has
+User "1" -- "*" ExamRecord : has
+Question "1" -- "*" Progress : has
+UserRepository ..> User
+QuestionRepository ..> Question
+ProgressRepository ..> Progress
+ExamRecordRepository ..> ExamRecord
+UserService ..> UserRepository
+QuestionService ..> QuestionRepository
+ProgressService ..> ProgressRepository
+ExamRecordService ..> ExamRecordRepository
+UserController ..> UserService
+QuestionController ..> QuestionService
+ProgressController ..> ProgressService
+ExamRecordController ..> ExamRecordService
+UserRegistrationDto ..> User
+UserLoginDto ..> User
+QuestionDto ..> Question
+ProgressDto ..> Progress
+ExamRecordDto ..> ExamRecord
+SecurityConfig ..> JwtAuthenticationFilter
+UserDetailsServiceImpl ..> UserRepository
+JwtAuthenticationFilter ..> JwtUtils
+UserDetailsServiceImpl ..> UserDetailsImpl
+
+@enduml
