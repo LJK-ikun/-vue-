@@ -89,10 +89,10 @@ cd vueblog
 cd easyblog-backend
 
 # 编译后端项目
-./apache-maven-3.8.6/bin/mvn.cmd clean compile
+mvn clean compile
 
 # 运行后端服务
-./apache-maven-3.8.6/bin/mvn.cmd spring-boot:run
+mvn spring-boot:run
 ```
 
 后端服务将在 `http://localhost:8080` 启动
