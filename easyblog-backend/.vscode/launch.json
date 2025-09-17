@@ -1,0 +1,62 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Debug Spring Boot",
+      "request": "launch",
+      "mainClass": "com.example.easyblogbackend.EasyBlogBackendApplication",
+      "projectName": "easyblog-backend",
+      "args": "",
+      "vmArgs": "-Dspring.profiles.active=dev -Xmx512m -Xms256m",
+      "console": "internalConsole",
+      "env": {
+        "SPRING_DATASOURCE_URL": "jdbc:mysql://localhost:3306/easyblog?useSSL=false&serverTimezone=UTC",
+        "SPRING_DATASOURCE_USERNAME": "root",
+        "SPRING_DATASOURCE_PASSWORD": "123456"
+      }
+    },
+    {
+      "type": "java",
+      "name": "Run Spring Boot",
+      "request": "launch",
+      "mainClass": "com.example.easyblogbackend.EasyBlogBackendApplication",
+      "projectName": "easyblog-backend",
+      "args": "",
+      "vmArgs": "-Dspring.profiles.active=dev -Xmx512m -Xms256m",
+      "console": "internalConsole",
+      "noDebug": true,
+      "env": {
+        "SPRING_DATASOURCE_URL": "jdbc:mysql://localhost:3306/easyblog?useSSL=false&serverTimezone=UTC",
+        "SPRING_DATASOURCE_USERNAME": "root",
+        "SPRING_DATASOURCE_PASSWORD": "123456"
+      }
+    },
+    {
+      "type": "java",
+      "name": "Debug Test",
+      "request": "launch",
+      "mainClass": "",
+      "projectName": "easyblog-backend",
+      "args": "",
+      "vmArgs": "",
+      "console": "internalConsole",
+      "testMethods": [
+        "${command:java.test.editor.context}"
+      ]
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Spring Boot + Frontend Dev",
+      "configurations": [
+        "Run Spring Boot"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "full-stack"
+      },
+      "stopAll": true
+    }
+  ]
+}

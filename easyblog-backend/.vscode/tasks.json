@@ -1,0 +1,179 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Maven Clean",
+      "type": "shell",
+      "command": "mvn",
+      "args": [
+        "clean"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": [
+        "$mvn"
+      ]
+    },
+    {
+      "label": "Maven Compile",
+      "type": "shell",
+      "command": "mvn",
+      "args": [
+        "compile"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": [
+        "$mvn"
+      ]
+    },
+    {
+      "label": "Maven Package",
+      "type": "shell",
+      "command": "mvn",
+      "args": [
+        "package",
+        "-DskipTests"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": [
+        "$mvn"
+      ]
+    },
+    {
+      "label": "Maven Install",
+      "type": "shell",
+      "command": "mvn",
+      "args": [
+        "install",
+        "-DskipTests"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": [
+        "$mvn"
+      ]
+    },
+    {
+      "label": "Maven Test",
+      "type": "shell",
+      "command": "mvn",
+      "args": [
+        "test"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": [
+        "$mvn"
+      ]
+    },
+    {
+      "label": "Maven Spring Boot Run",
+      "type": "shell",
+      "command": "mvn",
+      "args": [
+        "spring-boot:run"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": [
+        "$mvn"
+      ],
+      "options": {
+        "env": {
+          "SPRING_DATASOURCE_URL": "jdbc:mysql://localhost:3306/easyblog?useSSL=false&serverTimezone=UTC",
+          "SPRING_DATASOURCE_USERNAME": "root",
+          "SPRING_DATASOURCE_PASSWORD": "123456"
+        }
+      }
+    },
+    {
+      "label": "Create Database",
+      "type": "shell",
+      "command": "mysql",
+      "args": [
+        "-u",
+        "root",
+        "-p123456",
+        "-e",
+        "CREATE DATABASE IF NOT EXISTS easyblog CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Drop Database",
+      "type": "shell",
+      "command": "mysql",
+      "args": [
+        "-u",
+        "root",
+        "-p123456",
+        "-e",
+        "DROP DATABASE IF EXISTS easyblog;"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Full Build",
+      "dependsOn": [
+        "Maven Clean",
+        "Maven Package"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Setup Database",
+      "dependsOn": [
+        "Drop Database",
+        "Create Database"
+      ],
+      "group": "build"
+    }
+  ]
+}

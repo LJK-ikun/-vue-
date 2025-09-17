@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
@@ -51,4 +52,10 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     
     @Query("SELECT q FROM Question q WHERE q.isActive = true AND q.id = :id")
     Optional<Question> findActiveById(@Param("id") Long id);
+    
+    Long countByIsActiveTrue();
+    
+    Long countByCategoryNameAndIsActiveTrue(String categoryName);
+    
+    Long countByDifficultyAndIsActiveTrue(String difficulty);
 }

@@ -2,12 +2,21 @@ package com.example.easyblogbackend.controller;
 
 import com.example.easyblogbackend.entity.User;
 import com.example.easyblogbackend.service.UserService;
+import com.example.easyblogbackend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/users")
@@ -16,6 +25,15 @@ public class UserController {
     
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private JwtUtils jwtUtils;
+    
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    
+    @Autowired
+    private UserDetailsService userDetailsService;
     
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
@@ -30,15 +48,24 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            User user = userService.getUserByUsername(loginRequest.getUsername());
-            if (user == null || !userService.validatePassword(user, loginRequest.getPassword())) {
-                return ResponseEntity.badRequest().body("用户名或密码错误");
-            }
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+            );
             
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
+            String jwtToken = jwtUtils.generateToken(userDetails);
+            
+            User user = userService.getUserByUsername(loginRequest.getUsername());
             userService.updateLastLoginTime(user.getId());
-            return ResponseEntity.ok(user);
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", jwtToken);
+            response.put("user", user);
+            
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("用户名或密码错误");
         }
     }
     
@@ -102,7 +129,7 @@ public class UserController {
         }
     }
     
-    static class LoginRequest {
+    public static class LoginRequest {
         private String username;
         private String password;
         

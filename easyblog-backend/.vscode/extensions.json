@@ -1,0 +1,33 @@
+{
+  "recommendations": [
+    // Java开发扩展
+    "vscjava.vscode-java-pack",
+    "redhat.java",
+    "vscjava.vscode-spring-boot-dashboard",
+    "vscjava.vscode-spring-initializr",
+    "pivotal.vscode-boot-dev-pack",
+    
+    // Maven扩展
+    "vscjava.vscode-maven",
+    
+    // 数据库扩展
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-mysql",
+    "formulahendry.vscode-mysql",
+    
+    // 前端开发扩展
+    "vue.volar",
+    "vue.vscode-typescript-vue-plugin",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    
+    // 通用扩展
+    "ms-vscode.vscode-json",
+    "redhat.vscode-yaml",
+    "ms-vscode.vscode-xml",
+    "streetsidesoftware.code-spell-checker",
+    "eamodio.gitlens",
+    "ms-vscode.vscode-node-azure-pack"
+  ],
+  "unwantedRecommendations": []
+}

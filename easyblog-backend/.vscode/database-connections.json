@@ -1,0 +1,46 @@
+{
+  "mysql": {
+    "host": "localhost",
+    "port": 3306,
+    "user": "root",
+    "password": "123456",
+    "database": "easyblog",
+    "connectionLimit": 10,
+    "charset": "utf8mb4",
+    "timezone": "+08:00",
+    "connectTimeout": 10000,
+    "acquireTimeout": 10000,
+    "timeout": 10000,
+    "debug": false,
+    "multipleStatements": false,
+    "ssl": {
+      "rejectUnauthorized": false
+    }
+  },
+  "connections": [
+    {
+      "name": "EasyBlog MySQL",
+      "server": "localhost",
+      "port": 3306,
+      "database": "easyblog",
+      "username": "root",
+      "password": "123456",
+      "connectionTimeout": 30,
+      "driver": "MySQL",
+      "savePassword": true,
+      "connectString": "jdbc:mysql://localhost:3306/easyblog?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+    }
+  ],
+  "vscode-database": {
+    "connections": {
+      "mysql": {
+        "host": "localhost",
+        "port": 3306,
+        "user": "root",
+        "password": "123456",
+        "database": "easyblog",
+        "ssl": false
+      }
+    }
+  }
+}
